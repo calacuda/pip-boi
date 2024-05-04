@@ -4,8 +4,11 @@ use std::fmt::Display;
 pub use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, EnumIter, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, EnumIter, Serialize, Deserialize, Default,
+)]
 pub enum MenuTab {
+    #[default]
     #[serde(rename = "stats")]
     Stats,
     // Inv,
@@ -22,12 +25,6 @@ pub enum MenuTab {
     #[serde(rename = "todo")]
     Todo,
     // Wifi,
-}
-
-impl Default for MenuTab {
-    fn default() -> Self {
-        MenuTab::Stats
-    }
 }
 
 impl Display for MenuTab {
