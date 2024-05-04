@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Add Clippy
+      run: "rustup component add clippy-preview"
     - name: Run Clippy
       working-directory: ${{ matrix.dir }}
-      run: "cargo install clippy; cargo clippy"
+      run: "cargo clippy"
