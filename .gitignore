@@ -1,0 +1,5 @@
+old/
+**/.envrc
+**/.direnv
+**/tiles
+gui/gui-server/

@@ -1,0 +1,14 @@
+default:
+  just --list
+
+run:
+  cargo leptos watch
+
+c-test:
+  cargo test
+
+test:
+  cargo test
+
+tailwind:
+  npx tailwindcss -i ./input.css -o ./style/output.css --watch
