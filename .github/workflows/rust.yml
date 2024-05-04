@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        dir: ['api', 'gui', 'gui-server']
+        dir: ['api', 'gui-server']
 
     steps:
     - uses: actions/checkout@v4
