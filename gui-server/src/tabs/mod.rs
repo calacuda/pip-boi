@@ -9,7 +9,7 @@ pub mod stats;
 pub mod todo;
 
 pub use cal::CalApp;
-pub use com::ComApp;
+pub use com::{ComApp, SerialData, SerialMessages};
 pub use ducky::DuckyApp;
 pub use map::{MapApp, MapData};
 pub use stats::{GraphData, StatsApp};

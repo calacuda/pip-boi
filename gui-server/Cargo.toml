@@ -30,6 +30,8 @@ actix-web-actors = { version = "4.3.0", optional = true }
 actix-broker = { version = "0.4.3", optional = true }
 slippy-map-tiles = "0.16.0"
 leptos-use = { version = "0.10.9" }
+chrono = { version = "0.4.38", features = ["serde"] }
+queues = "1.1.0"
 # web-sys = { version = "0.3.69", features = ["Element"], optional = true }
 
 [features]

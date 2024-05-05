@@ -1,5 +1,5 @@
-use crate::TabChangeMsg;
-use leptos::*;
+use crate::{tabs::*, TabChangeMsg};
+use leptos::{leptos_dom::logging::console_log, *};
 use leptos_meta::*;
 use leptos_router::*;
 use leptos_server_signal::create_server_signal;
@@ -8,29 +8,31 @@ use pip_boi_api::MenuTab;
 
 #[component]
 pub fn App() -> impl IntoView {
-    use crate::tabs::*;
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
-    // #[cfg(feature = "csr")]
-    // {
-    //     let tab = window().location();
-    //     info!("window location: {tab:?}");
-    // }
-    // #[cfg(not(feature = "csr"))]
-    // {
-    //     let tab = MenuTab::Stats;
-    //     info!("menu => Stats");
-    // }
-
-    // let (menu_tab, set_menu_tab) = create_signal(MenuTab::Stats);
-
-    // TODO: move server signals here.
 
     leptos_server_signal::provide_websocket("ws://localhost:3000/ws").unwrap();
 
     let heart_rate_data = create_server_signal::<GraphData>("heart_beat_graph");
     let spo2_data = create_server_signal::<GraphData>("blood_oxygen_graph");
     let map_data = create_server_signal::<MapData>("map_data");
+    // Gets serial data from serial port.
+    let recv_serial = create_server_signal::<SerialData>("serial_coms");
+
+    let (msgs, set_msgs) = create_signal::<SerialMessages>(SerialMessages::default());
+    let mut first = true;
+
+    // create effect that adds messages to mesg to all_msgs
+    create_effect(move |memo| {
+        if memo.is_some() {
+            let msg = recv_serial();
+            console_log("effect");
+
+            set_msgs.update(|mgs| mgs.push_rx((msg.msg, msg.timestamp)));
+        }
+
+        ()
+    });
 
     view! {
         // injects a stylesheet into the document <head>
@@ -40,7 +42,7 @@ pub fn App() -> impl IntoView {
         // sets the document title
         <Title text="PIP-Boi"/>
 
-    <div class="h-screen w-screen bg-black">
+        <div class="h-screen w-screen bg-black">
             // content for this welcome page
             <Router>
                 <nav>
@@ -51,10 +53,9 @@ pub fn App() -> impl IntoView {
                 <main class="bg-black w-[100vw] h-[90vh] justify-center">
                     <Routes>
                         <Route path="" view=HomePage/>
-                        // TODO: set menu_tab based on route
                         <Route path="/stats" view=move || { view! { <StatsApp heart_rate_data=heart_rate_data spo2_data=spo2_data/> }} />
                         <Route path="/map" view=move || { view! { <MapApp map_data=map_data/> }} />
-                        <Route path="/com" view=ComApp/>
+                        <Route path="/com" view=move || { view! { <ComApp rx_msgs=msgs add_msgs=set_msgs/> }}/>
                         <Route path="/ducky" view=DuckyApp/>
                         <Route path="/cal" view=CalApp/>
                         <Route path="/todo" view=TodoApp/>

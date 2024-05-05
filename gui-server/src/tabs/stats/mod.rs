@@ -11,9 +11,6 @@ pub struct GraphData {
 
 impl GraphData {
     pub fn set_up(&mut self, size: usize) {
-        // self.data = Vec::from(&[0.5; 50])
-        // self.data = (0..size).map(|_| 0.5).collect();
-        // self.data = Vec::with_capacity(size);
         self.size = size;
         self.i = 0;
     }
